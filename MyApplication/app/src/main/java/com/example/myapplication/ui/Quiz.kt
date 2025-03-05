@@ -27,12 +27,16 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.myapplication.viewModel.PokemonViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Quiz(navController: NavController) {
     val viewModel: PokemonViewModel = viewModel()
-    val collection by viewModel.pokemon.collectAsState()
+    val pokemoncol by viewModel.pokemon.collectAsState()
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,28 +57,31 @@ fun Quiz(navController: NavController) {
                 .padding(innerPadding), // Correction ici
             contentAlignment = Alignment.Center
         ) {
-
-            if(collection.isEmpty()){
+            if (pokemoncol.isEmpty()) {
                 Text("Chargement...")
 
-            }else{
-
-                LazyColumn (
+            } else {
+                LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    items(collection) { item ->
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(pokemoncol) { pokemon ->
                         Card(modifier = Modifier.fillMaxSize()) {
-                            Text(item.name.fr, fontSize = 24.sp)
+                            Text(pokemon.name.fr, fontSize = 24.sp)
                             AsyncImage(
-                                model = item.sprites.regular,
-                                contentDescription = item.name.fr,
+                                model = pokemon.sprites.regular,
+                                contentDescription = pokemon.name.fr,
                                 modifier = Modifier.size(128.dp),
-                                alignment = Alignment.Center
+                                alignment = Alignment.Center,
+                                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                             )
                         }
+
                     }
                 }
             }
+
         }
     }
+
 }

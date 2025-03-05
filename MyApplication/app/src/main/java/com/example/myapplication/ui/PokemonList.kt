@@ -22,7 +22,7 @@ import com.example.myapplication.viewModel.PokemonViewModel
 @Composable
 fun PokemonList() {
     val viewModel: PokemonViewModel = viewModel()
-    val collection by viewModel.pokemon.collectAsState()
+    val collection by viewModel.pokemons.collectAsState()
     if(collection.isEmpty()){
         Text("Chargement...")
 

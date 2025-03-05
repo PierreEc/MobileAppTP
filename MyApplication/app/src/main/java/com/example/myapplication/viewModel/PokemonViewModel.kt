@@ -11,15 +11,17 @@ import kotlinx.coroutines.launch
 
 
 class PokemonViewModel: ViewModel(){
+    var pokemons : MutableStateFlow<List<Pokemon>> = MutableStateFlow <List<Pokemon>>(emptyList())
     var pokemon : MutableStateFlow<List<Pokemon>> = MutableStateFlow <List<Pokemon>>(emptyList())
     init{
         getPokemons()
+        getRandomPokemon()
     }
 
      fun getPokemons() {
         viewModelScope.launch{
             try {
-                pokemon.value = PokemonService.retrofit.fetchPokemons()
+                pokemons.value = PokemonService.retrofit.fetchPokemons()
             }
             catch (
                 e: Exception
@@ -31,7 +33,11 @@ class PokemonViewModel: ViewModel(){
         }
     }
 
-    fun getRandomPokemon(): Pokemon {
+    fun getRandomPokemon() {
         val randomIndex = (1 until 1025).random()
+        viewModelScope.launch{
+            pokemon.value = listOf(PokemonService.retrofit.fetchPokemonById(randomIndex))
+        }
+
     }
 }
