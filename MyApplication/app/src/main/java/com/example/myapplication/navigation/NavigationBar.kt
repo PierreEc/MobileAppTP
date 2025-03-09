@@ -17,7 +17,7 @@ import com.example.myapplication.ui.Home
 import com.example.myapplication.ui.PokemonList
 import com.example.myapplication.ui.Quiz
 import com.example.myapplication.ui.Ranking
-
+import com.example.myapplication.ui.Result
 
 @Composable
 fun MainScreen() {
@@ -34,7 +34,13 @@ fun MainScreen() {
             composable(Navigation.Home.route) { Home(navController) }
             composable(Navigation.Infos.route) { PokemonList() }
             composable(Navigation.Ranking.route) { Ranking() }
-            composable(Navigation.Quiz.route) {Quiz(navController) }
+            composable(Navigation.Quiz.route) { Quiz(navController) }
+            composable("result/{correctAnswers}/{totalQuestions}/{timeInSeconds}") { backStackEntry ->
+                val correctAnswers = backStackEntry.arguments?.getString("correctAnswers")?.toInt() ?: 0
+                val totalQuestions = backStackEntry.arguments?.getString("totalQuestions")?.toInt() ?: 0
+                val timeInSeconds = backStackEntry.arguments?.getString("timeInSeconds")?.toLong() ?: 0
+                Result(navController, correctAnswers, totalQuestions, timeInSeconds)
+            }
         }
     }
 }
